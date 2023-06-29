@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BaiThiNVA0025.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230629020037_Create_Table_NVAcau3")]
+    [Migration("20230629020956_Create_Table_NVAcau3")]
     partial class Create_Table_NVAcau3
     {
         /// <inheritdoc />

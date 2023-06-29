@@ -8,93 +8,98 @@ using Microsoft.EntityFrameworkCore;
 using BaiThiNVA0025.Models;
 using BaiThiNVA0025.Models.Process;
 
-
 namespace BaiThiNVA0025.Controllers
 {
-    public class NVAcau3Controller : Controller
+    public class KeThuaController : Controller
     {
         private readonly ApplicationDbContext _context;
-       
+        private StringProcess strPro = new StringProcess();
 
-        public NVAcau3Controller(ApplicationDbContext context)
+        public KeThuaController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: NVAcau3
+        // GET: KeThua
         public async Task<IActionResult> Index()
         {
-              return _context.NVAcau3 != null ? 
-                          View(await _context.NVAcau3.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.NVAcau3'  is null.");
+              return _context.KeThua != null ? 
+                          View(await _context.KeThua.ToListAsync()) :
+                          Problem("Entity set 'ApplicationDbContext.KeThua'  is null.");
         }
 
-        // GET: NVAcau3/Details/5
+        // GET: KeThua/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.NVAcau3 == null)
+            if (id == null || _context.KeThua == null)
             {
                 return NotFound();
             }
 
-            var nVAcau3 = await _context.NVAcau3
-                .FirstOrDefaultAsync(m => m.MaSinhVien == id);
-            if (nVAcau3 == null)
+            var keThua = await _context.KeThua
+                .FirstOrDefaultAsync(m => m.KeThuaID == id);
+            if (keThua == null)
             {
                 return NotFound();
             }
 
-            return View(nVAcau3);
+            return View(keThua);
         }
 
-        // GET: NVAcau3/Create
-       public IActionResult Create()
+        // GET: KeThua/Create
+        public IActionResult Create()
         {
-            
+            var IDdautien = "MSV01";
+            var countAn = _context.KeThua.Count();
+            if (countAn > 0)
+            {
+                var KeThuaID = _context.KeThua.OrderByDescending(m => m.KeThuaID).First().KeThuaID;
+                IDdautien = strPro.AutoGenerateCode(KeThuaID);
+            }
+            ViewBag.newID = IDdautien;
             return View();
         }
 
-
-        // POST: NVAcau3/Create
+        // POST: KeThua/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MaSinhVien,TenSinhVien,PhoneSinhVien")] NVAcau3 nVAcau3)
+        public async Task<IActionResult> Create([Bind("KeThuaID")] KeThua keThua)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(nVAcau3);
+                _context.Add(keThua);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(nVAcau3);
+            return View(keThua);
         }
 
-        // GET: NVAcau3/Edit/5
+        // GET: KeThua/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null || _context.NVAcau3 == null)
+            if (id == null || _context.KeThua == null)
             {
                 return NotFound();
             }
 
-            var nVAcau3 = await _context.NVAcau3.FindAsync(id);
-            if (nVAcau3 == null)
+            var keThua = await _context.KeThua.FindAsync(id);
+            if (keThua == null)
             {
                 return NotFound();
             }
-            return View(nVAcau3);
+            return View(keThua);
         }
 
-        // POST: NVAcau3/Edit/5
+        // POST: KeThua/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("MaSinhVien,TenSinhVien,PhoneSinhVien")] NVAcau3 nVAcau3)
+        public async Task<IActionResult> Edit(string id, [Bind("KeThuaID")] KeThua keThua)
         {
-            if (id != nVAcau3.MaSinhVien)
+            if (id != keThua.KeThuaID)
             {
                 return NotFound();
             }
@@ -103,12 +108,12 @@ namespace BaiThiNVA0025.Controllers
             {
                 try
                 {
-                    _context.Update(nVAcau3);
+                    _context.Update(keThua);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!NVAcau3Exists(nVAcau3.MaSinhVien))
+                    if (!KeThuaExists(keThua.KeThuaID))
                     {
                         return NotFound();
                     }
@@ -119,49 +124,49 @@ namespace BaiThiNVA0025.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(nVAcau3);
+            return View(keThua);
         }
 
-        // GET: NVAcau3/Delete/5
+        // GET: KeThua/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null || _context.NVAcau3 == null)
+            if (id == null || _context.KeThua == null)
             {
                 return NotFound();
             }
 
-            var nVAcau3 = await _context.NVAcau3
-                .FirstOrDefaultAsync(m => m.MaSinhVien == id);
-            if (nVAcau3 == null)
+            var keThua = await _context.KeThua
+                .FirstOrDefaultAsync(m => m.KeThuaID == id);
+            if (keThua == null)
             {
                 return NotFound();
             }
 
-            return View(nVAcau3);
+            return View(keThua);
         }
 
-        // POST: NVAcau3/Delete/5
+        // POST: KeThua/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            if (_context.NVAcau3 == null)
+            if (_context.KeThua == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.NVAcau3'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.KeThua'  is null.");
             }
-            var nVAcau3 = await _context.NVAcau3.FindAsync(id);
-            if (nVAcau3 != null)
+            var keThua = await _context.KeThua.FindAsync(id);
+            if (keThua != null)
             {
-                _context.NVAcau3.Remove(nVAcau3);
+                _context.KeThua.Remove(keThua);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool NVAcau3Exists(string id)
+        private bool KeThuaExists(string id)
         {
-          return (_context.NVAcau3?.Any(e => e.MaSinhVien == id)).GetValueOrDefault();
+          return (_context.KeThua?.Any(e => e.KeThuaID == id)).GetValueOrDefault();
         }
     }
 }
